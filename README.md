@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://python.org)
 [![Django](https://img.shields.io/badge/Django-5.2-green.svg)](https://djangoproject.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC.svg)](https://tailwindcss.com)
-[![Security Scan](https://github.com/YOUR_USERNAME/SNTDjango/actions/workflows/security.yml/badge.svg)](https://github.com/YOUR_USERNAME/SNTDjango/actions/workflows/security.yml)
+[![Security Scan](https://github.com/Alexandrina-Kuzeleva/SNTDjango/actions/workflows/security.yml/badge.svg)](https://github.com/YOUR_USERNAME/SNTDjango/actions/workflows/security.yml)
 
 Веб-приложение для автоматизации работы садоводческого некоммерческого товарищества (СНТ). Управление новостями, документами, учёт взносов и личные кабинеты жителей.
 
