@@ -1,0 +1,83 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <i class="fas fa-user-plus text-5xl text-snt-green"></i>
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">Регистрация</h2>
+            <p class="mt-2 text-sm text-gray-600">Заполните форму для регистрации в СНТ "Ивушка"</p>
+        </div>
+        
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-500 text-xl"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-800 font-semibold">Важно!</p>
+                    <p class="text-sm text-blue-700">
+                        Вашим логином будет <strong>номер вашего участка</strong>.<br>
+                        Он понадобится для входа в личный кабинет.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <form class="mt-8 space-y-6" method="post">
+            {% csrf_token %}
+            <div class="space-y-4">
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ field.label }}
+                        {% if field.field.required %}
+                            <span class="text-red-500">*</span>
+                        {% endif %}
+                    </label>
+                    <div class="relative">
+                        {% if field.name == 'lot_number' %}
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            </div>
+                        {% elif field.name == 'full_name' %}
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            </div>
+                        {% elif field.name == 'phone' %}
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            </div>
+                        {% elif field.name == 'email' %}
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            </div>
+                        {% elif field.name == 'password1' or field.name == 'password2' %}
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            </div>
+                        {% endif %}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <p class="mt-1 text-xs text-red-600">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-snt-green to-snt-light hover:from-snt-dark hover:to-snt-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-snt-green transition">
+                    Зарегистрироваться
+                </button>
+            </div>
+        </form>
+        
+        <div class="text-center">
+            <p class="text-sm text-gray-600">
+                Уже есть аккаунт? 
+                <a href="{% url 'login' %}" class="font-medium text-snt-green hover:text-snt-dark">Войдите</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

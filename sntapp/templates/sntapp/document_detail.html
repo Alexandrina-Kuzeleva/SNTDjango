@@ -1,0 +1,72 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}{{ document.title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <!-- bredcrumbs -->
+        <nav class="text-sm mb-6">
+            <a href="{% url 'documents' %}" class="text-snt-green hover:text-snt-dark">← Назад к документам</a>
+        </nav>
+        
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <!-- Title -->
+            <div class="bg-gradient-to-r from-snt-green to-snt-light p-6 text-white">
+                <div class="flex items-center gap-3">
+                    <i class="{{ document.get_file_icon }} text-3xl"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold">{{ document.title }}</h1>
+                        <p class="text-green-100 text-sm">{{ document.get_document_type_display }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-6">
+                <!-- Info -->
+                <div class="grid md:grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                    <div>
+                        <p class="text-sm text-gray-600"><i class="far fa-calendar-alt mr-2"></i> Дата загрузки: {{ document.uploaded_at|date:"d.m.Y H:i" }}</p>
+                        <p class="text-sm text-gray-600 mt-1"><i class="fas fa-user mr-2"></i> Загрузил: {{ document.uploaded_by.full_name|default:document.uploaded_by.username }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600"><i class="fas fa-database mr-2"></i> Размер файла: {{ document.file_size|filesizeformat }}</p>
+                        <p class="text-sm text-gray-600 mt-1"><i class="fas fa-download mr-2"></i> Скачиваний: {{ document.downloads_count }}</p>
+                    </div>
+                </div>
+                
+                <!-- Description -->
+                {% if document.description %}
+                <div class="mb-6">
+                    <h3 class="font-bold text-gray-800 mb-2">Описание</h3>
+                    <p class="text-gray-600">{{ document.description }}</p>
+                </div>
+                {% endif %}
+                
+                <!-- Preview -->
+                {% if document.preview %}
+                <div class="mb-6">
+                    <h3 class="font-bold text-gray-800 mb-2">Предпросмотр</h3>
+                    <img src="{{ document.preview.url }}" class="max-w-full h-auto rounded-lg border" alt="{{ document.title }}">
+                </div>
+                {% endif %}
+                
+                <!-- Actions -->
+                <div class="flex gap-3 pt-4 border-t">
+                    <a href="{% url 'document_download' document.id %}" 
+                       class="flex-1 bg-gradient-to-r from-snt-green to-snt-light text-white py-3 rounded-lg hover:shadow-lg transition text-center font-semibold">
+                        <i class="fas fa-download"></i> Скачать документ
+                    </a>
+                    {% if user.is_moderator or user.is_staff %}
+                    <a href="{% url 'document_delete' document.id %}" 
+                       class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition"
+                       onclick="return confirm('Вы уверены, что хотите удалить этот документ?')">
+                        <i class="fas fa-trash"></i> Удалить
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

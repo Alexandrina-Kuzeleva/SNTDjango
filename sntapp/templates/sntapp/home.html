@@ -1,0 +1,79 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+
+<div class="container mx-auto px-4 py-12">
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- news -->
+        <div class="lg:w-2/3">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">
+                    <i class="fas fa-newspaper text-snt-green"></i> Последние новости
+                </h2>
+                {% if user.is_moderator or user.is_staff %}
+                    <a href="{% url 'news_create' %}" class="bg-gradient-to-r from-snt-green to-snt-light text-white px-4 py-2 rounded-lg hover:shadow-lg transition">
+                        <i class="fas fa-plus"></i> Добавить новость
+                    </a>
+                {% endif %}
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                {% for news in news_list %}
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
+                    {% if news.image %}
+                        <img src="{{ news.image.url }}" class="h-56 w-full object-cover" alt="{{ news.title }}">
+                    {% else %}
+                        <div class="h-56 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tree fa-4x text-gray-400"></i>
+                        </div>
+                    {% endif %}
+                    <div class="p-5">
+                        <div class="flex items-center gap-3 text-sm text-gray-500 mb-3">
+                            <span><i class="far fa-calendar-alt mr-1"></i> {{ news.created_at|date:"d.m.Y" }}</span>
+                            <span><i class="fas fa-user mr-1"></i> {{ news.author.full_name|default:news.author.username }}</span>
+                        </div>
+                        <h3 class="font-bold text-xl mb-2 text-gray-800 hover:text-snt-green transition">
+                            <a href="#">{{ news.title }}</a>
+                        </h3>
+                        <a href="{% url 'news_detail' news.id %}" class="inline-flex items-center text-snt-green hover:text-snt-dark font-semibold">
+                            Подробнее <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-2 text-center py-12 bg-white rounded-xl">
+                    <i class="fas fa-newspaper fa-4x text-gray-300 mb-3"></i>
+                    <p class="text-gray-500 text-lg">Новостей пока нет</p>
+                    {% if user.is_moderator or user.is_staff %}
+                        <a href="{% url 'news_create' %}" class="mt-4 inline-block bg-snt-green text-white px-4 py-2 rounded-lg">
+                            Создать первую новость
+                        </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if news_list.count > 4 %}
+            <div class="text-center mt-8">
+                <a href="{% url 'announcements' %}" class="inline-block bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition">
+            Все новости <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+            
+            <!-- announcements -->
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-bell text-yellow-600 text-xl"></i>
+                    <h3 class="font-bold text-yellow-800 text-lg">Важное объявление</h3>
+                </div>
+                <p class="text-gray-700">Очередное собрание членов СНТ состоится <strong class="text-yellow-800">25 мая 2026 года</strong> в 11:00</p>
+                <p class="text-sm text-gray-500 mt-3">Явка обязательна. Подробности на странице объявлений.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

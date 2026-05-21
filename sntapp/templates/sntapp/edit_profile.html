@@ -1,0 +1,65 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-gradient-to-r from-snt-green to-snt-light p-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-user-edit"></i> Редактирование профиля
+                </h2>
+            </div>
+            
+            <form method="post" class="p-6 space-y-6">
+                {% csrf_token %}
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-user mr-1 text-snt-green"></i> ФИО
+                        </label>
+                        <input type="text" name="full_name" value="{{ user.full_name }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-phone mr-1 text-snt-green"></i> Телефон
+                        </label>
+                        <input type="text" name="phone" value="{{ user.phone }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green"
+                               placeholder="+7 (XXX) XXX-XX-XX">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-envelope mr-1 text-snt-green"></i> Email
+                        </label>
+                        <input type="email" name="email" value="{{ user.email }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-map-marker-alt mr-1 text-snt-green"></i> Номер участка
+                        </label>
+                        <input type="text" value="{{ user.lot_number }}" disabled 
+                               class="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
+                        <p class="text-xs text-gray-500 mt-1">Номер участка нельзя изменить. Для смены обратитесь к администратору.</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-snt-green to-snt-light text-white py-2 rounded-lg hover:shadow-lg transition">
+                        <i class="fas fa-save"></i> Сохранить изменения
+                    </button>
+                    <a href="{% url 'profile' %}" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg text-center hover:bg-gray-300 transition">
+                        Отмена
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

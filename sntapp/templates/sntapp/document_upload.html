@@ -1,0 +1,72 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}Загрузка документа{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-gradient-to-r from-snt-green to-snt-light p-6">
+                <h2 class="text-2xl font-bold text-white">Загрузка документа</h2>
+                <p class="text-green-100 mt-1">Заполните форму для добавления нового документа</p>
+            </div>
+            
+            <form method="post" enctype="multipart/form-data" class="p-6">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="mb-4">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ field.label }}
+                        {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    
+                    {% if field.name == 'description' %}
+                        <textarea name="{{ field.name }}" id="{{ field.id_for_label }}" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green"
+                                  rows="3">{{ field.value|default:'' }}</textarea>
+                    {% elif field.name == 'document_type' %}
+                        <select name="{{ field.name }}" id="{{ field.id_for_label }}" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green">
+                            {% for value, label in field.field.choices %}
+                            <option value="{{ value }}" {% if field.value == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    {% elif field.name == 'file' or field.name == 'preview' %}
+                        <input type="file" name="{{ field.name }}" id="{{ field.id_for_label }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green">
+                    {% elif field.name == 'is_important' or field.name == 'is_visible' %}
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" name="{{ field.name }}" id="{{ field.id_for_label }}" 
+                                   {% if field.value %}checked{% endif %}
+                                   class="w-4 h-4 text-snt-green focus:ring-snt-green border-gray-300 rounded">
+                            <label for="{{ field.id_for_label }}" class="text-sm text-gray-600">{{ field.help_text }}</label>
+                        </div>
+                    {% else %}
+                        <input type="text" name="{{ field.name }}" id="{{ field.id_for_label }}" 
+                               value="{{ field.value|default:'' }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green">
+                    {% endif %}
+                    
+                    {% if field.help_text and field.name != 'is_important' and field.name != 'is_visible' %}
+                    <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+                    {% endif %}
+                    
+                    {% for error in field.errors %}
+                    <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-snt-green to-snt-light text-white py-2 rounded-lg hover:shadow-lg transition">
+                        <i class="fas fa-upload"></i> Загрузить документ
+                    </button>
+                    <a href="{% url 'documents' %}" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg text-center hover:bg-gray-300 transition">
+                        Отмена
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
