@@ -1,0 +1,48 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}Загрузка долгов{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-gradient-to-r from-snt-green to-snt-light p-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-file-excel"></i> Загрузка данных о долгах
+                </h2>
+                <p class="text-green-100 mt-2">Загрузите Excel файл от бухгалтера</p>
+            </div>
+            
+            <div class="p-6">
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-blue-600 mt-0.5 mr-3"></i>
+                        <div>
+                            <p class="text-sm text-blue-800 font-semibold mb-1">Инструкция по загрузке файла:</p>
+                            <ul class="text-sm text-blue-700 space-y-1 list-disc list-inside">
+                                <li>Файл должен быть в формате .xlsx или .xls</li>
+                                <li>Обязательные колонки: Номер участка, ФИО, Членские взносы, Целевые взносы</li>
+                                <li>Если участок не зарегистрирован на сайте, данные будут пропущены</li>
+                                <li>Данные обновляются ежемесячно</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="post" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                    <div class="flex gap-3 pt-4">
+                        <button type="submit" class="flex-1 bg-gradient-to-r from-snt-green to-snt-light text-white py-3 rounded-lg hover:shadow-lg transition">
+                            <i class="fas fa-upload"></i> Загрузить и обработать
+                        </button>
+                        <a href="{% url 'debt_summary' %}" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg text-center hover:bg-gray-300 transition">
+                            Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

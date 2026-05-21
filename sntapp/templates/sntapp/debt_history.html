@@ -1,0 +1,68 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}История долгов{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-gray-50 p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-snt-green"></i> 
+                        История долгов: {{ user.full_name }}
+                    </h2>
+                    <a href="{% if request.user.is_moderator or request.user.is_staff %}{% url 'debt_summary' %}{% else %}{% url 'profile' %}{% endif %}" 
+                       class="text-snt-green hover:text-snt-dark">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </a>
+                </div>
+                <p class="text-gray-600 mt-2">Участок №{{ user.lot_number }}</p>
+            </div>
+            
+            <div class="p-6">
+                {% if debts %}
+                    <div class="space-y-4">
+                        {% regroup debts by period|slice:":7" as period_list %}
+                        {% for period in period_list %}
+                            <div class="border rounded-lg overflow-hidden">
+                                <div class="bg-gray-100 px-4 py-2 font-semibold">
+                                    Период: {{ period.grouper }}
+                                </div>
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-sm">Тип взноса</th>
+                                            <th class="px-4 py-2 text-right text-sm">Сумма долга</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for debt in period.list %}
+                                        <tr class="border-t">
+                                            <td class="px-4 py-2">
+                                                {% if debt.fee_type == 'membership' %}
+                                                    <i class="fas fa-hand-holding-usd text-blue-500 mr-2"></i> Членские взносы
+                                                {% else %}
+                                                    <i class="fas fa-chart-line text-green-500 mr-2"></i> Целевые взносы
+                                                {% endif %}
+                                            </td>
+                                            <td class="px-4 py-2 text-right font-semibold {% if debt.amount > 0 %}text-red-600{% else %}text-green-600{% endif %}">
+                                                {{ debt.amount|floatformat:2 }} ₽
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-12">
+                        <i class="fas fa-history text-4xl text-gray-300 mb-3"></i>
+                        <p class="text-gray-500">История долгов отсутствует</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

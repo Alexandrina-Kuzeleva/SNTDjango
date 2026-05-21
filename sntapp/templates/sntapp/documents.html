@@ -1,0 +1,167 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}Документы СНТ{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- Title -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Документы СНТ "Ивушка"</h1>
+        <p class="text-gray-600">Устав, протоколы собраний, отчеты и другие официальные документы</p>
+    </div>
+    
+    <!-- download -->
+    {% if user.is_moderator or user.is_staff %}
+    <div class="mb-6 text-right">
+        <a href="{% url 'document_upload' %}" class="bg-gradient-to-r from-snt-green to-snt-light text-white px-6 py-2 rounded-lg hover:shadow-lg transition inline-flex items-center gap-2">
+            <i class="fas fa-upload"></i> Загрузить документ
+        </a>
+    </div>
+    {% endif %}
+    
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+        <div class="flex flex-col md:flex-row gap-4 justify-between">
+            <!-- Search -->
+            <div class="flex-1">
+                <form method="get" class="flex gap-2">
+                    <input type="text" name="search" value="{{ current_search }}" 
+                           placeholder="Поиск документов..." 
+                           class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green">
+                    <button type="submit" class="bg-snt-green text-white px-6 py-2 rounded-lg hover:bg-snt-dark transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Filter -->
+            <div>
+                <select name="type" onchange="window.location.href='?type='+this.value" 
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green">
+                    <option value="">Все типы</option>
+                    {% for type_code, type_name in document_types %}
+                    <option value="{{ type_code }}" {% if current_type == type_code %}selected{% endif %}>
+                        {{ type_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Sort -->
+            <div>
+                <select name="sort" onchange="window.location.href='?sort='+this.value" 
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-snt-green">
+                    <option value="-uploaded_at" {% if current_sort == '-uploaded_at' %}selected{% endif %}>По дате (новые)</option>
+                    <option value="uploaded_at" {% if current_sort == 'uploaded_at' %}selected{% endif %}>По дате (старые)</option>
+                    <option value="title" {% if current_sort == 'title' %}selected{% endif %}>По названию (А-Я)</option>
+                    <option value="-title" {% if current_sort == '-title' %}selected{% endif %}>По названию (Я-А)</option>
+                    <option value="-downloads_count" {% if current_sort == '-downloads_count' %}selected{% endif %}>По популярности</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Documents list -->
+    {% if page_obj %}
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for document in page_obj %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
+            <!-- Prewie -->
+            <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                {% if document.preview %}
+                    <img src="{{ document.preview.url }}" class="h-full w-full object-cover" alt="{{ document.title }}">
+                {% else %}
+                    <div class="text-center">
+                        <i class="fas {{ document.get_file_icon }} fa-4x text-snt-green"></i>
+                        <p class="text-sm text-gray-500 mt-2">{{ document.get_file_extension|upper }}</p>
+                    </div>
+                {% endif %}
+                
+                {% if document.is_important %}
+                <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-lg text-xs font-bold">
+                    <i class="fas fa-star"></i> Важный
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Info -->
+            <div class="p-5">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                        {{ document.get_document_type_display }}
+                    </span>
+                    <span class="text-xs text-gray-500">
+                        <i class="far fa-file"></i> {{ document.file_size|filesizeformat }}
+                    </span>
+                </div>
+                
+                <h3 class="font-bold text-lg text-gray-800 mb-2 line-clamp-2">{{ document.title }}</h3>
+                
+                {% if document.description %}
+                <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ document.description }}</p>
+                {% endif %}
+                
+                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                    <span><i class="far fa-calendar-alt"></i> {{ document.uploaded_at|date:"d.m.Y" }}</span>
+                    <span><i class="fas fa-download"></i> {{ document.downloads_count }} скачиваний</span>
+                </div>
+                
+                <!-- Actions -->
+                <div class="flex gap-2">
+                    <a href="{% url 'document_detail' document.id %}" 
+                       class="flex-1 bg-snt-green text-white text-center py-2 rounded-lg hover:bg-snt-dark transition">
+                        <i class="fas fa-eye"></i> Просмотр
+                    </a>
+                    <a href="{% url 'document_download' document.id %}" 
+                       class="flex-1 bg-gray-100 text-gray-700 text-center py-2 rounded-lg hover:bg-gray-200 transition">
+                        <i class="fas fa-download"></i> Скачать
+                    </a>
+                    {% if user.is_moderator or user.is_staff %}
+                    <a href="{% url 'document_delete' document.id %}" 
+                       class="bg-red-100 text-red-600 px-3 py-2 rounded-lg hover:bg-red-200 transition"
+                       onclick="return confirm('Вы уверены?')">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Пагинация -->
+    {% if page_obj.has_other_pages %}
+    <div class="flex justify-center mt-8">
+        <div class="flex gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page=1{% if current_type %}&type={{ current_type }}{% endif %}{% if current_search %}&search={{ current_search }}{% endif %}" 
+               class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition">« Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_search %}&search={{ current_search }}{% endif %}" 
+               class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition">‹ Назад</a>
+            {% endif %}
+            
+            <span class="px-4 py-2 bg-snt-green text-white rounded-lg">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_search %}&search={{ current_search }}{% endif %}" 
+               class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Вперед ›</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_search %}&search={{ current_search }}{% endif %}" 
+               class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Последняя »</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="text-center py-12 bg-white rounded-xl">
+        <i class="fas fa-folder-open fa-4x text-gray-300 mb-4"></i>
+        <p class="text-gray-500 text-lg">Документов не найдено</p>
+        {% if user.is_moderator or user.is_staff %}
+        <a href="{% url 'document_upload' %}" class="mt-4 inline-block bg-snt-green text-white px-6 py-2 rounded-lg">
+            Загрузить первый документ
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

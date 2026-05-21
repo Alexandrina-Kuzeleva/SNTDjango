@@ -1,0 +1,36 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}О нас{% endblock %}
+{% block seo %}
+{% if page.seo_title %}
+<meta name="title" content="{{ page.seo_title }}">
+<meta name="description" content="{{ page.seo_description }}">
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <!-- Title -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ page.title }}</h1>
+            <div class="w-24 h-1 bg-snt-green mx-auto"></div>
+        </div>
+        
+        <!-- Content -->
+        <div class="mb-8">
+            <div class="bg-white rounded-xl shadow-md p-8">
+                <div class="prose prose-lg max-w-none">
+                    {{ page.content|safe }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Images -->
+        {% if page.image %}
+        <div class="mb-8">
+            <img src="{{ page.image.url }}" alt="{{ page.title }}" class="w-full h-full object-cover rounded-xl shadow-lg">
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

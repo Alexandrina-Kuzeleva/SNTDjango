@@ -1,0 +1,74 @@
+{% extends 'sntapp/base.html' %}
+{% block title %}Правление СНТ{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-6xl mx-auto">
+        <!-- Title -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ page.title }}</h1>
+            <div class="w-24 h-1 bg-snt-green mx-auto"></div>
+        </div>
+        
+        <!-- Image -->
+        {% if page.image %}
+        <div class="mb-8">
+            <img src="{{ page.image.url }}" alt="{{ page.title }}" class="w-full h-80 object-cover rounded-xl shadow-lg">
+        </div>
+        {% endif %}
+        
+        <!-- Content -->
+        <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+            <div class="prose prose-lg max-w-none">
+                {{ page.content|safe }}
+            </div>
+        </div>
+        
+        <!-- Members -->
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Состав правления</h2>
+        
+        {% if members %}
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for member in members %}
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition">
+                <div class="h-64 overflow-hidden">
+                    {% if member.photo %}
+                        <img src="{{ member.photo.url }}" alt="{{ member.full_name }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                            <i class="fas fa-user-circle fa-5x text-gray-400"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="p-5">
+                    <div class="inline-block bg-green-100 text-snt-green text-xs px-2 py-1 rounded mb-2">
+                        {{ member.get_position_display }}
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-800 mb-2">{{ member.full_name }}</h3>
+                    {% if member.phone %}
+                    <p class="text-gray-600 text-sm mb-1">
+                        <i class="fas fa-phone mr-2 text-snt-green"></i> {{ member.phone }}
+                    </p>
+                    {% endif %}
+                    {% if member.email %}
+                    <p class="text-gray-600 text-sm">
+                        <i class="fas fa-envelope mr-2 text-snt-green"></i> {{ member.email }}
+                    </p>
+                    {% endif %}
+                    {% if member.description %}
+                    <p class="text-gray-500 text-sm mt-3 pt-3 border-t">{{ member.description }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12 bg-white rounded-xl">
+            <i class="fas fa-users fa-4x text-gray-300 mb-4"></i>
+            <p class="text-gray-500">Информация о правлении скоро появится</p>
+        </div>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}
