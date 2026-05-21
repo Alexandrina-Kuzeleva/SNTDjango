@@ -1,0 +1,12 @@
+exclude:
+  - /migrations/
+  - /venv/
+  - /env/
+  - /tests/
+
+skips:
+  - B311 
+  - B605 
+
+severity: MEDIUM
+confidence: MEDIUM
