@@ -111,7 +111,7 @@
                 <a href="{% url 'about' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">О нас</a>
                 <a href="{% url 'management' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Правление</a>
                 <a href="{% url 'documents' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Документы</a>
-                <a href="{% url 'info' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Информация</a>
+                {% comment %} <a href="{% url 'info' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Информация</a> {% endcomment %}
                 <a href="{% url 'announcements' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Объявления</a>
                 <a href="{% url 'contacts' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Контакты</a>
                 {% if user.is_authenticated %}
@@ -155,17 +155,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white mt-20">
-        <div class="container mx-auto px-4 py-12">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <h3 class="text-xl font-bold">СНТ Ивушка</h3>
-                    </div>
-                </div>
-                <div>
-                    <p>&copy; 2021-2026 СНТ Ивушка</p>
-                </div>
+    <footer class="bg-gray-900 border-t border-gray-800 mt-auto">
+        <div class="container mx-auto px-4 py-4">
+            <div class="text-center">
+                <p class="text-gray-400 text-sm">
+                    © 2021-2026 <span class="font-medium text-gray-200">СНТ Ивушка</span>
+                </p>
             </div>
         </div>
     </footer>
