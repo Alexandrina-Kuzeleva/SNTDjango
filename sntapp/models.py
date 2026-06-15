@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
@@ -282,3 +284,32 @@ class ContactInfo(models.Model):
     
     def __str__(self):
         return f"{self.get_contact_type_display()}: {self.value}"
+    
+class ImportantAnnouncement(models.Model):
+    title = models.CharField('Заголовок', max_length=200, default='Важное объявление')
+    content = models.TextField('Текст объявления')
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
+    is_active = models.BooleanField('Активно', default=True)
+    expire_at = models.DateTimeField('Дата и время удаления', blank=True, null=True, 
+                                       help_text='После этой даты объявление скроется автоматически')
+    created_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='announcements'
+    )
+    
+    class Meta:
+        verbose_name = 'Важное объявление'
+        verbose_name_plural = 'Важные объявления'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.title
+    
+    def is_expired(self):
+        if self.expire_at and timezone.now() > self.expire_at:
+            return True
+        return False

@@ -63,15 +63,47 @@
             {% endif %}
         </div>
             
-            <!-- announcements -->
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 rounded-xl p-5">
-                <div class="flex items-center gap-2 mb-2">
-                    <i class="fas fa-bell text-yellow-600 text-xl"></i>
-                    <h3 class="font-bold text-yellow-800 text-lg">Важное объявление</h3>
-                </div>
-                <p class="text-gray-700">Очередное собрание членов СНТ состоится <strong class="text-yellow-800">25 мая 2026 года</strong> в 11:00</p>
-                <p class="text-sm text-gray-500 mt-3">Явка обязательна. Подробности на странице объявлений.</p>
+        {% if active_announcement %}
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fas fa-bell text-yellow-600 text-xl"></i>
+                <h3 class="font-bold text-yellow-800 text-lg">{{ active_announcement.title }}</h3>
+                {% if active_announcement.expire_at %}
+                    <span class="text-xs text-yellow-600 ml-2">
+                        <i class="far fa-clock"></i> до {{ active_announcement.expire_at|date:"d.m.Y" }}
+                    </span>
+                {% endif %}
             </div>
+            <p class="text-gray-700">{{ active_announcement.content|linebreaks }}</p>
+            
+            {% if user.is_moderator or user.is_staff %}
+            <div class="mt-3 pt-2 border-t border-yellow-200 flex gap-3">
+                <a href="{% url 'announcement_create' %}" class="text-sm text-snt-green hover:text-snt-dark">
+                    <i class="fas fa-plus"></i> Добавить объявление
+                </a>
+                <a href="{% url 'admin:sntapp_importantannouncement_change' active_announcement.id %}" 
+                class="text-sm text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-edit"></i> Редактировать
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+            {% if user.is_moderator or user.is_staff %}
+            <div class="bg-gray-50 border-l-4 border-gray-300 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-bell text-gray-400 text-xl"></i>
+                    <h3 class="font-bold text-gray-500 text-lg">Нет активных объявлений</h3>
+                </div>
+                <p class="text-gray-400 text-sm">Нажмите кнопку ниже, чтобы добавить важное объявление</p>
+                <div class="mt-3">
+                    <a href="{% url 'announcement_create' %}" class="text-sm text-snt-green hover:text-snt-dark">
+                        <i class="fas fa-plus"></i> Добавить объявление
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
         </div>
     </div>
 </div>

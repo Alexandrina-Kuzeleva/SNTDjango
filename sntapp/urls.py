@@ -23,6 +23,7 @@ urlpatterns = [
     path('news/<int:pk>/edit/', views.news_edit, name='news_edit'),
     path('news/<int:pk>/delete/', views.news_delete, name='news_delete'),
     path('news/<int:pk>/', views.news_detail, name='news_detail'),
+    path('announcement/create/', views.announcement_create, name='announcement_create'),
 
     path('documents/', views.documents_list, name='documents'),
     path('documents/upload/', views.document_upload, name='document_upload'),

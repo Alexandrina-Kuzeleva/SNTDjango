@@ -66,7 +66,7 @@ def parse_excel_debts(file, request):
                 if target_2025 > 0:
                     debts_to_update.append({
                         'fee_type': 'target',
-                        'period': '2025',
+                        'period': 'Целевой взнос 2025',
                         'amount': target_2025
                     })
                 
@@ -75,7 +75,7 @@ def parse_excel_debts(file, request):
                 if membership_1_2026 > 0:
                     debts_to_update.append({
                         'fee_type': 'membership',
-                        'period': '2026-H1',
+                        'period': 'Членские взносы 1 полугодие 2026',
                         'amount': membership_1_2026
                     })
                 
@@ -84,7 +84,7 @@ def parse_excel_debts(file, request):
                 if membership_2_2025 > 0:
                     debts_to_update.append({
                         'fee_type': 'membership',
-                        'period': '2025-H2',
+                        'period': 'Членские взносы 2 полугодие 2025',
                         'amount': membership_2_2025
                     })
                 
@@ -93,7 +93,7 @@ def parse_excel_debts(file, request):
                 if membership_1_2025 > 0:
                     debts_to_update.append({
                         'fee_type': 'membership',
-                        'period': '2025-H1',
+                        'period': 'Членские взносы 1 полугодие 2025',
                         'amount': membership_1_2025
                     })
                 
@@ -102,7 +102,7 @@ def parse_excel_debts(file, request):
                 if membership_2_2024 > 0:
                     debts_to_update.append({
                         'fee_type': 'membership',
-                        'period': '2024-H2',
+                        'period': 'Членские взносы 2 полугодие 2024',
                         'amount': membership_2_2024
                     })
                 
@@ -111,7 +111,7 @@ def parse_excel_debts(file, request):
                 if membership_1_2024 > 0:
                     debts_to_update.append({
                         'fee_type': 'membership',
-                        'period': '2024-H1',
+                        'period': 'Членские взносы 1 полугодие 2024',
                         'amount': membership_1_2024
                     })
                 
@@ -120,7 +120,7 @@ def parse_excel_debts(file, request):
                 if membership_2_2023 > 0:
                     debts_to_update.append({
                         'fee_type': 'membership',
-                        'period': '2023-H2',
+                        'period': 'Членские взносы 2 полугодие 2023',
                         'amount': membership_2_2023
                     })
                 
@@ -129,7 +129,7 @@ def parse_excel_debts(file, request):
                 if membership_1_2023 > 0:
                     debts_to_update.append({
                         'fee_type': 'membership',
-                        'period': '2023-H1',
+                        'period': 'Членские взносы 1 полугодие 2023',
                         'amount': membership_1_2023
                     })
                 
@@ -138,7 +138,7 @@ def parse_excel_debts(file, request):
                 if membership_2022 > 0:
                     debts_to_update.append({
                         'fee_type': 'membership',
-                        'period': '2022',
+                        'period': 'Членские взносы 2022',
                         'amount': membership_2022
                     })
                 
@@ -147,7 +147,7 @@ def parse_excel_debts(file, request):
                 if target_2022_2024 > 0:
                     debts_to_update.append({
                         'fee_type': 'target',
-                        'period': '2022-2024',
+                        'period': 'Целевой взнос 2022-2024',
                         'amount': target_2022_2024
                     })
                 
@@ -156,7 +156,7 @@ def parse_excel_debts(file, request):
                 if target_2020_2021 > 0:
                     debts_to_update.append({
                         'fee_type': 'target',
-                        'period': '2020-2021',
+                        'period': 'Целевой взнос 2020-2021',
                         'amount': target_2020_2021
                     })
                 
@@ -165,7 +165,7 @@ def parse_excel_debts(file, request):
                 if target_2018_2019 > 0:
                     debts_to_update.append({
                         'fee_type': 'target',
-                        'period': '2018-2019',
+                        'period': 'Целевой взнос 2018-2019',
                         'amount': target_2018_2019
                     })
                 
@@ -174,7 +174,7 @@ def parse_excel_debts(file, request):
                 if ppm > 0:
                     debts_to_update.append({
                         'fee_type': 'other',
-                        'period': 'ppm',
+                        'period': 'ППМ ',
                         'amount': ppm
                     })
                 
@@ -183,7 +183,7 @@ def parse_excel_debts(file, request):
                 if vzu > 0:
                     debts_to_update.append({
                         'fee_type': 'other',
-                        'period': 'vzu',
+                        'period': 'ВЗУ',
                         'amount': vzu
                     })
                 
