@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User, Debt, News, Document
 from .models import StaticPage, ManagementMember, ContactInfo
+from .models import ImportantAnnouncement
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
@@ -63,3 +64,18 @@ class ContactInfoAdmin(admin.ModelAdmin):
     list_filter = ['contact_type', 'is_active']
     search_fields = ['value']
     list_editable = ['order', 'is_active']
+
+@admin.register(ImportantAnnouncement)
+class ImportantAnnouncementAdmin(admin.ModelAdmin):
+    list_display = ['title', 'is_active', 'expire_at', 'created_at']
+    list_filter = ['is_active']
+    search_fields = ['title', 'content']
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('title', 'content')
+        }),
+        ('Настройки показа', {
+            'fields': ('is_active', 'expire_at'),
+            'description': 'Установите дату и время, когда объявление должно автоматически исчезнуть'
+        }),
+    )

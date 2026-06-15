@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import User, News, Document
 from django.core.exceptions import ValidationError
-
+from .models import ImportantAnnouncement
 
 class UserRegistrationForm(UserCreationForm):
     username = None
@@ -119,3 +119,23 @@ class ExcelUploadForm(forms.Form):
         help_text='Например: 2024-01 (если не указано в файле)',
         widget=forms.TextInput(attrs={'placeholder': '2024-01'})
     )
+
+class AnnouncementForm(forms.ModelForm):
+    class Meta:
+        model = ImportantAnnouncement
+        fields = ['title', 'content', 'expire_at']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg',
+                'placeholder': 'Заголовок объявления'
+            }),
+            'content': forms.Textarea(attrs={
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg',
+                'rows': 4,
+                'placeholder': 'Текст объявления...'
+            }),
+            'expire_at': forms.DateTimeInput(attrs={
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg',
+                'type': 'datetime-local'
+            }),
+        }

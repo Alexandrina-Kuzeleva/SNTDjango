@@ -65,8 +65,8 @@
                     <a href="{% url 'about' %}" class="text-white hover:text-gray-200 transition font-medium">О нас</a>
                     <a href="{% url 'management' %}" class="text-white hover:text-gray-200 transition font-medium">Правление</a>
                     <a href="{% url 'documents' %}" class="text-white hover:text-gray-200 transition font-medium">Документы</a>
-                    <a href="{% url 'info' %}" class="text-white hover:text-gray-200 transition font-medium">Информация</a>
-                    <a href="{% url 'announcements' %}" class="text-white hover:text-gray-200 transition font-medium">Объявления</a>
+                    <!--<a href="{% url 'info' %}" class="text-white hover:text-gray-200 transition font-medium">Информация</a>
+                    <a href="{% url 'announcements' %}" class="text-white hover:text-gray-200 transition font-medium">Объявления</a>-->
                     <a href="{% url 'contacts' %}" class="text-white hover:text-gray-200 transition font-medium">Контакты</a>
                     
                     {% if user.is_authenticated %}
@@ -111,8 +111,8 @@
                 <a href="{% url 'about' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">О нас</a>
                 <a href="{% url 'management' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Правление</a>
                 <a href="{% url 'documents' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Документы</a>
-                {% comment %} <a href="{% url 'info' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Информация</a> {% endcomment %}
-                <a href="{% url 'announcements' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Объявления</a>
+                <!--<a href="{% url 'info' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Информация</a>
+                <a href="{% url 'announcements' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Объявления</a>-->
                 <a href="{% url 'contacts' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Контакты</a>
                 {% if user.is_authenticated %}
                     <a href="{% url 'profile' %}" class="block py-2 text-white hover:bg-snt-dark px-3 rounded transition">Профиль</a>

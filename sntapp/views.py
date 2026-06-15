@@ -9,6 +9,8 @@ from .forms import ExcelUploadForm, UserRegistrationForm, NewsForm, DocumentForm
 from .utils import parse_excel_debts, get_debt_summary, get_user_total_debt
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
+from .models import ImportantAnnouncement
+from .forms import AnnouncementForm
 
 def register(request):
     if request.method == 'POST':
@@ -41,8 +43,21 @@ def user_logout(request):
     return redirect('home')
 
 def home(request):
-    news_list = News.objects.filter(is_published=True)[:6]  # последние 6 новостей
-    return render(request, 'sntapp/home.html', {'news_list': news_list})
+    news_list = News.objects.filter(is_published=True)[:6]
+    
+    active_announcement = ImportantAnnouncement.objects.filter(
+        is_active=True
+    ).first()
+    
+    if active_announcement and active_announcement.is_expired():
+        active_announcement.is_active = False
+        active_announcement.save()
+        active_announcement = None
+    
+    return render(request, 'sntapp/home.html', {
+        'news_list': news_list,
+        'active_announcement': active_announcement
+    })
 
 from .models import StaticPage, ManagementMember, ContactInfo
 
@@ -415,3 +430,22 @@ def contacts(request):
 def news_detail(request, pk):
     news = get_object_or_404(News, pk=pk, is_published=True)
     return render(request, 'sntapp/news_detail.html', {'news': news})
+
+@login_required
+def announcement_create(request):
+    if not (request.user.is_staff or request.user.is_moderator):
+        messages.error(request, 'У вас нет прав')
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = AnnouncementForm(request.POST)
+        if form.is_valid():
+            announcement = form.save(commit=False)
+            announcement.created_by = request.user
+            announcement.save()
+            messages.success(request, 'Объявление добавлено!')
+            return redirect('home')
+    else:
+        form = AnnouncementForm()
+    
+    return render(request, 'sntapp/announcement_form.html', {'form': form})
